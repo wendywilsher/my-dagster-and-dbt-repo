@@ -36,12 +36,11 @@ jobs:
           dagster_cloud_file: $DAGSTER_CLOUD_FILE
 
       - name: Checkout for Python Executable Deploy
-
         if: steps.prerun.outputs.result == 'pex-deploy'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-          path: project-repo   
+          path: project-repo
 
       - name: Python Executable Deploy
         if: steps.prerun.outputs.result == 'pex-deploy'
@@ -52,7 +51,6 @@ jobs:
           python_version: "${{ env.PYTHON_VERSION }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
             
       - name: Prepare DBT project for deployment
         if: steps.prerun.outputs.result == 'pex-deploy'
