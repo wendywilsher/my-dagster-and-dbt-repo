@@ -36,7 +36,14 @@ jobs:
           dagster_cloud_file: $DAGSTER_CLOUD_FILE
 
       - name: Checkout for Python Executable Deploy
+     
+        if: steps.prerun.outputs.result == 'pex-deploy'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          path: project-repo
 
+      
       - name: Prepare DBT project for deployment
         if: steps.prerun.outputs.result == 'pex-deploy'
         run: |
@@ -44,14 +51,7 @@ jobs:
           cd project-repo
           pip install . --upgrade --upgrade-strategy eager
           dagster-dbt project prepare-and-package --file dagster_and_dbt/project.py
-        shell: bash
-
-      
-        if: steps.prerun.outputs.result == 'pex-deploy'
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-          path: project-repo
+        shell: bash    
 
       - name: Python Executable Deploy
         if: steps.prerun.outputs.result == 'pex-deploy'
